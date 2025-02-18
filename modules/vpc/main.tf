@@ -26,16 +26,16 @@ module "vpc" {
 
   public_subnet_tags_per_az = { for az in var.availability_zones :
     az => {
-    Role = "public"
+      Role = "public"
       Name = "${var.vpc_name}-public-subnet-${az}"
-      }
+    }
   }
 
   private_subnet_tags_per_az = { for az in var.availability_zones :
     az => {
-    Role = "private"
+      Role = "private"
       Name = "${var.vpc_name}-private-subnet-${az}"
-      }
+    }
   }
 
   database_subnet_tags = {

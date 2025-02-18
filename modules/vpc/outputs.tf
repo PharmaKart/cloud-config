@@ -37,3 +37,4 @@ output "security_group_private_backend" {
 output "security_group_database" {
   value = aws_security_group.database_sg.id
 }
+
