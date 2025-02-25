@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: authentication-deployment
+  labels:
+    app: pharmakart
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pharmakart
+      service: authentication
+  template:
+    metadata:
+      labels:
+        app: pharmakart
+        service: authentication
+    spec:
+      containers:
+        - name: pharmakart-authentication
+          image: 719150847619.dkr.ecr.ca-central-1.amazonaws.com/pharmakart/authentication-svc:5cd1bcf
+          imagePullPolicy: Always
+          ports:
+            - name: api
+              containerPort: 50051
+          resources:
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+            requests:
+              memory: "256Mi"
+              cpu: "250m"
+          env:
+            - name: DB_HOST
+              value: "host.minikube.internal"
+            - name: DB_PORT
+              value: "5432"
+            - name: DB_USER
+              value: "postgres"
+            - name: DB_PASSWORD
+              value: "postgres"
+            - name: DB_NAME
+              value: "pharmakartdb"
+            - name: JWT_SECRET
+              value: "your-jwt-secret"
+      imagePullSecrets:
+        - name: regcred
