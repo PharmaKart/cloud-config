@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend-deployment
+  labels:
+    app: pharmakart
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pharmakart
+      service: frontend
+  template:
+    metadata:
+      labels:
+        app: pharmakart
+        service: frontend
+    spec:
+      containers:
+        - name: frontend-svc
+          image: 719150847619.dkr.ecr.ca-central-1.amazonaws.com/pharmakart/frontend-svc:28d8e0a
+          imagePullPolicy: Always
+          ports:
+            - name: web
+              containerPort: 3000
+      imagePullSecrets:
+        - name: regcred

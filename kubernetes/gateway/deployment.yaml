@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gateway-deployment
+  labels:
+    app: pharmakart
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pharmakart
+      service: gateway
+  template:
+    metadata:
+      labels:
+        app: pharmakart
+        service: gateway
+    spec:
+      containers:
+        - name: pharmakart-gateway
+          image: 719150847619.dkr.ecr.ca-central-1.amazonaws.com/pharmakart/gateway-svc:2e92cff
+          imagePullPolicy: Always
+          ports:
+            - name: api
+              containerPort: 8080
+      imagePullSecrets:
+        - name: regcred
