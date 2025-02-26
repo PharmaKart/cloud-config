@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: authentication-deployment
+  name: payment-deployment
   labels:
     app: pharmakart
 spec:
@@ -9,20 +9,20 @@ spec:
   selector:
     matchLabels:
       app: pharmakart
-      service: authentication
+      service: payment
   template:
     metadata:
       labels:
         app: pharmakart
-        service: authentication
+        service: payment
     spec:
       containers:
-        - name: pharmakart-authentication
-          image: 719150847619.dkr.ecr.ca-central-1.amazonaws.com/pharmakart/authentication-svc:7209dfa
+        - name: pharmakart-payment
+          image: 719150847619.dkr.ecr.ca-central-1.amazonaws.com/pharmakart/payment-svc:7a11d6d
           imagePullPolicy: Always
           ports:
             - name: api
-              containerPort: 50051
+              containerPort: 50054
           resources:
             limits:
               memory: "512Mi"
@@ -42,8 +42,10 @@ spec:
             - name: DB_NAME
               value: "pharmakartdb"
             - name: PORT
-              value: "50051"
-            - name: JWT_SECRET
-              value: "your-jwt-secret"
+              value: "50054"
+            - name: FRONTEND_URL
+              value: "frontend-service:3000"
+            - name: STRIPE_SECRET_KEY
+              value: "your-stripe-secret-key"
       imagePullSecrets:
         - name: regcred
