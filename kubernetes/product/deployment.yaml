@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: authentication-deployment
+  name: product-deployment
   labels:
     app: pharmakart
 spec:
@@ -9,20 +9,20 @@ spec:
   selector:
     matchLabels:
       app: pharmakart
-      service: authentication
+      service: product
   template:
     metadata:
       labels:
         app: pharmakart
-        service: authentication
+        service: product
     spec:
       containers:
-        - name: pharmakart-authentication
-          image: 719150847619.dkr.ecr.ca-central-1.amazonaws.com/pharmakart/authentication-svc:7209dfa
+        - name: pharmakart-product
+          image: 719150847619.dkr.ecr.ca-central-1.amazonaws.com/pharmakart/product-svc:c79e137
           imagePullPolicy: Always
           ports:
             - name: api
-              containerPort: 50051
+              containerPort: 50052
           resources:
             limits:
               memory: "512Mi"
@@ -41,8 +41,6 @@ spec:
               value: "postgres"
             - name: DB_NAME
               value: "pharmakartdb"
-            - name: PORT
-              value: "50051"
             - name: JWT_SECRET
               value: "your-jwt-secret"
       imagePullSecrets:

@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: authentication-deployment
+  name: reminder-deployment
   labels:
     app: pharmakart
 spec:
@@ -9,20 +9,20 @@ spec:
   selector:
     matchLabels:
       app: pharmakart
-      service: authentication
+      service: reminder
   template:
     metadata:
       labels:
         app: pharmakart
-        service: authentication
+        service: reminder
     spec:
       containers:
-        - name: pharmakart-authentication
-          image: 719150847619.dkr.ecr.ca-central-1.amazonaws.com/pharmakart/authentication-svc:7209dfa
+        - name: pharmakart-reminder
+          image: 719150847619.dkr.ecr.ca-central-1.amazonaws.com/pharmakart/reminder-svc:01eeeb0
           imagePullPolicy: Always
           ports:
             - name: api
-              containerPort: 50051
+              containerPort: 50055
           resources:
             limits:
               memory: "512Mi"
@@ -42,8 +42,10 @@ spec:
             - name: DB_NAME
               value: "pharmakartdb"
             - name: PORT
-              value: "50051"
-            - name: JWT_SECRET
-              value: "your-jwt-secret"
+              value: "50055"
+            - name: SNS_TOPIC_ARN
+              value: "your-sns-topic-arn"
+            - name: SQS_QUEUE_URL
+              value: "your-sqs-queue-url"
       imagePullSecrets:
         - name: regcred
