@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
         - name: pharmakart-gateway
-          image: 719150847619.dkr.ecr.ca-central-1.amazonaws.com/pharmakart/gateway-svc:5223f4d
+          image: 719150847619.dkr.ecr.ca-central-1.amazonaws.com/pharmakart/gateway-svc:ea9a291
           imagePullPolicy: Always
           ports:
             - name: api
