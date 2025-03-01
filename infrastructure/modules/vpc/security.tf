@@ -26,8 +26,6 @@ resource "aws_vpc_security_group_ingress_rule" "public_sg_ingress" {
 
 resource "aws_vpc_security_group_egress_rule" "public_sg_egress" {
   security_group_id = aws_security_group.public_sg.id
-  from_port         = 0
-  to_port           = 0
   ip_protocol       = "-1"
   cidr_ipv4         = "0.0.0.0/0"
   description       = "Allow all outbound traffic"
@@ -65,8 +63,6 @@ resource "aws_vpc_security_group_ingress_rule" "bastion_sg_ingress" {
 
 resource "aws_vpc_security_group_egress_rule" "bastion_sg_egress" {
   security_group_id = aws_security_group.bastion_sg.id
-  from_port         = 0
-  to_port           = 0
   ip_protocol       = "-1"
   cidr_ipv4         = "0.0.0.0/0"
   description       = "Allow all outbound traffic"
@@ -104,8 +100,6 @@ resource "aws_vpc_security_group_ingress_rule" "private_sg_frontend_ingress" {
 
 resource "aws_vpc_security_group_egress_rule" "private_sg_frontend_egress" {
   security_group_id = aws_security_group.private_sg_frontend.id
-  from_port         = 0
-  to_port           = 0
   ip_protocol       = "-1"
   cidr_ipv4         = "0.0.0.0/0"
   description       = "Allow all outbound traffic"
@@ -141,10 +135,54 @@ resource "aws_vpc_security_group_ingress_rule" "private_sg_backend_ingress" {
   }
 }
 
+# Allow the control plane to communicate with worker nodes on port 443 (https)
+resource "aws_vpc_security_group_ingress_rule" "eks_control_plane_ingress" {
+  security_group_id = aws_security_group.private_sg_backend.id
+  from_port         = 443
+  to_port           = 443
+  ip_protocol       = "tcp"
+  cidr_ipv4         = var.vpc_cidr
+  description       = "Allow HTTPS from control plane to worker nodes"
+
+  tags = {
+    Name      = "EKS-ControlPlane-HTTPS"
+    Project   = "Pharmakart"
+    ManagedBy = "Terraform"
+  }
+}
+
+# Allow the control plane to communicate with worker nodes on port 10250 (kubelet)
+resource "aws_vpc_security_group_ingress_rule" "eks_kubelet_ingress" {
+  security_group_id = aws_security_group.private_sg_backend.id
+  from_port         = 10250
+  to_port           = 10250
+  ip_protocol       = "tcp"
+  cidr_ipv4         = var.vpc_cidr
+  description       = "Allow kubelet traffic from control plane to worker nodes"
+
+  tags = {
+    Name      = "EKS-Kubelet"
+    Project   = "Pharmakart"
+    ManagedBy = "Terraform"
+  }
+}
+
+# Allow worker nodes to communicate with each other
+resource "aws_vpc_security_group_ingress_rule" "eks_node_to_node" {
+  security_group_id            = aws_security_group.private_sg_backend.id
+  referenced_security_group_id = aws_security_group.private_sg_backend.id
+  ip_protocol                  = "-1"
+  description                  = "Allow all traffic between worker nodes"
+
+  tags = {
+    Name      = "EKS-NodeToNode"
+    Project   = "Pharmakart"
+    ManagedBy = "Terraform"
+  }
+}
+
 resource "aws_vpc_security_group_egress_rule" "private_sg_backend_egress" {
   security_group_id = aws_security_group.private_sg_backend.id
-  from_port         = 0
-  to_port           = 0
   ip_protocol       = "-1"
   cidr_ipv4         = "0.0.0.0/0"
   description       = "Allow all outbound traffic"
@@ -182,8 +220,6 @@ resource "aws_vpc_security_group_ingress_rule" "database_sg_ingress" {
 
 resource "aws_vpc_security_group_egress_rule" "database_sg_egress" {
   security_group_id = aws_security_group.database_sg.id
-  from_port         = 0
-  to_port           = 0
   ip_protocol       = "-1"
   cidr_ipv4         = "0.0.0.0/0"
   description       = "Allow all outbound traffic"

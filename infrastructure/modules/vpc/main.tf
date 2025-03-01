@@ -38,6 +38,14 @@ module "vpc" {
     }
   }
 
+  public_subnet_tags = {
+    "kubernetes.io/role/elb" = "1"
+  }
+  
+  private_subnet_tags = {
+    "kubernetes.io/role/internal-elb" = "1"
+  }
+
   database_subnet_tags = {
     Role = "database"
     Name = "${var.vpc_name}-database-subnet"

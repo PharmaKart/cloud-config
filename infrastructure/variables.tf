@@ -4,7 +4,7 @@ variable "default_region" {
 }
 
 locals {
-  cidr_subnets = cidrsubnets(var.vpc_cidr, 8, 8, 8, 8, 8, 8)
+  cidr_subnets = cidrsubnets(var.vpc_cidr, 8, 8, 8, 8, 8, 8, 8, 8)
 }
 
 variable "vpc_cidr" {
@@ -32,3 +32,12 @@ variable "database_port" {
   type        = number
 }
 
+variable "cluster_name" {
+  description = "The name of the EKS cluster"
+  type        = string
+}
+
+variable "cluster_version" {
+  description = "The version of the EKS cluster"
+  type        = string
+}
