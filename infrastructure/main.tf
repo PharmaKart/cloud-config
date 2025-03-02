@@ -22,6 +22,16 @@ module "eks" {
   vpc_id                = module.vpc.vpc_id
   subnet_ids            = slice(module.vpc.vpc_private_subnets, 2, 4)
   backend_port          = var.backend_port
-  cluster_security_group = module.vpc.security_group_private_backend
   depends_on = [ module.vpc ]
+}
+
+// Deploying the Ingress Load Balancer module
+module "ingress-lb" {
+  source                = "./modules/ingress-lb"
+  cluster_name          = var.cluster_name
+  cluster_version       = var.cluster_version
+  vpc_id                = module.vpc.vpc_id
+  subnet_ids            = slice(module.vpc.vpc_public_subnets, 0, 2)
+  provider_arn         = module.eks.oidc_provider_arn
+  depends_on = [ module.vpc, module.eks ]
 }
