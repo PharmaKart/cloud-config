@@ -41,3 +41,23 @@ variable "cluster_version" {
   description = "The version of the EKS cluster"
   type        = string
 }
+
+variable "db_instance_class" {
+  description = "The instance class to use for the RDS instance"
+  type        = string
+}
+
+variable "db_name" {
+  description = "The name of the database to create"
+  type        = string
+}
+
+variable "db_username" {
+  description = "The username to use for the database"
+  type        = string
+}
+
+variable "db_password" {
+  description = "The password to use for the database"
+  type        = string
+}

@@ -3,12 +3,12 @@ resource "kubernetes_ingress_v1" "pharmakart_ingress" {
   metadata {
     name = "pharmakart-ingress"
     annotations = {
-      "kubernetes.io/ingress.class"                 = "alb"
-      "alb.ingress.kubernetes.io/scheme"            = "internet-facing"
-      "alb.ingress.kubernetes.io/target-type"       = "ip"
-      "alb.ingress.kubernetes.io/security-groups"   = aws_security_group.alb_sg.id
-      "alb.ingress.kubernetes.io/listen-ports"      = jsonencode([{"HTTP": 80}])
-      "alb.ingress.kubernetes.io/healthcheck-path"  = "/health"
+      "kubernetes.io/ingress.class"                = "alb"
+      "alb.ingress.kubernetes.io/scheme"           = "internet-facing"
+      "alb.ingress.kubernetes.io/target-type"      = "ip"
+      "alb.ingress.kubernetes.io/security-groups"  = aws_security_group.alb_sg.id
+      "alb.ingress.kubernetes.io/listen-ports"     = jsonencode([{ "HTTP" : 80 }])
+      "alb.ingress.kubernetes.io/healthcheck-path" = "/health"
     }
   }
 
