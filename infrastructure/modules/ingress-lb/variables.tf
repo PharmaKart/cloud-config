@@ -18,7 +18,7 @@ variable "subnet_ids" {
   type        = list(string)
 }
 
-variable "backend_port" {
-  description = "The port for the backend"
-  type        = number
+variable "provider_arn" {
+  description = "The ARN of the provider"
+  type        = string
 }
