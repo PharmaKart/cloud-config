@@ -32,12 +32,12 @@ variable "database_port" {
   type        = number
 }
 
-variable "cluster_name" {
+variable "eks_cluster_name" {
   description = "The name of the EKS cluster"
   type        = string
 }
 
-variable "cluster_version" {
+variable "eks_cluster_version" {
   description = "The version of the EKS cluster"
   type        = string
 }
@@ -70,4 +70,29 @@ variable "bucket_name" {
 variable "s3_folders" {
   description = "The list of folders to create in the S3 bucket"
   type        = list(string)
+}
+
+variable "frontend_alb_name" {
+  description = "The name of the Frontend Application Load Balancer"
+  type        = string
+}
+
+variable "asg_name" {
+  description = "The name of the Auto Scaling Group"
+  type        = string
+}
+
+variable "ecs_cluster_name" {
+  description = "The name of the ECS cluster"
+  type        = string
+}
+
+variable "frontend_container_name" {
+  description = "The name of the frontend container"
+  type        = string
+}
+
+variable "frontend_container_image" {
+  description = "The image to use for the frontend container"
+  type        = string
 }

@@ -1,0 +1,27 @@
+default_region = "ca-central-1"
+
+vpc_cidr = "10.0.0.0/16"
+vpc_name = "pharmakart-vpc"
+
+frontend_port = 3000
+backend_port  = 8080
+database_port = 5432
+
+eks_cluster_name    = "pharmakart-eks"
+eks_cluster_version = "1.32"
+
+db_instance_class = "db.t3.micro"
+db_name           = "pharmakartdb"
+db_username       = "postgres"
+db_password       = "postgres"
+
+bucket_name = "pharmakart-bucket"
+s3_folders  = ["products", "prescriptions"]
+
+frontend_alb_name = "pharmakart-frontend-alb"
+
+asg_name = "pharmakart-asg"
+
+ecs_cluster_name         = "pharmakart-ecs"
+frontend_container_name  = "pharmakart-frontend"
+frontend_container_image = "docker.io/asrma7/nodetest:latest"
