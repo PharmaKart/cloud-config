@@ -14,6 +14,13 @@ module "vpc" {
   database_port         = var.database_port
 }
 
+// Deploying the S3 module
+module "s3" {
+  source      = "./modules/s3"
+  bucket_name = var.bucket_name
+  s3_folders  = var.s3_folders
+}
+
 // Deploying the EKS module
 module "eks" {
   source          = "./modules/eks"
@@ -22,18 +29,20 @@ module "eks" {
   vpc_id          = module.vpc.vpc_id
   subnet_ids      = slice(module.vpc.vpc_private_subnets, 2, 4)
   backend_port    = var.backend_port
-  depends_on      = [module.vpc]
+  s3_bucket_arn   = module.s3.bucket_arn
+  depends_on      = [module.vpc, module.s3]
 }
 
 // Deploying the Ingress Load Balancer module
 module "ingress-lb" {
-  source          = "./modules/ingress-lb"
-  cluster_name    = var.cluster_name
-  cluster_version = var.cluster_version
-  vpc_id          = module.vpc.vpc_id
-  subnet_ids      = slice(module.vpc.vpc_public_subnets, 0, 2)
-  provider_arn    = module.eks.oidc_provider_arn
-  depends_on      = [module.vpc, module.eks]
+  source                 = "./modules/ingress-lb"
+  cluster_name           = var.cluster_name
+  cluster_version        = var.cluster_version
+  vpc_id                 = module.vpc.vpc_id
+  subnet_ids             = slice(module.vpc.vpc_public_subnets, 0, 2)
+  provider_arn           = module.eks.oidc_provider_arn
+  node_security_group_id = module.eks.node_security_group_id
+  depends_on             = [module.vpc, module.eks]
 }
 
 // Deploying the RDS module
@@ -48,5 +57,5 @@ module "rds" {
   db_subnet_group_name       = module.vpc.vpc_database_subnet_group_name
   rds_instance_class         = var.db_instance_class
   eks_node_security_group_id = module.eks.node_security_group_id
-  depends_on                 = [module.vpc]
+  depends_on                 = [module.vpc, module.eks]
 }

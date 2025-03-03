@@ -33,6 +33,10 @@ module "eks" {
       min_size     = 2
       desired_size = 2
       max_size     = 3
+
+      iam_role_additional_policies = {
+        s3_access = aws_iam_policy.eks_nodes_s3_policy.arn
+      }
     }
   }
 

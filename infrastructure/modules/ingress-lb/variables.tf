@@ -22,3 +22,8 @@ variable "provider_arn" {
   description = "The ARN of the provider"
   type        = string
 }
+
+variable "node_security_group_id" {
+  description = "The ID of the security group for the EKS nodes"
+  type        = string
+}
