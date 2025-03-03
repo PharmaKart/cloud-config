@@ -18,6 +18,10 @@ output "vpc_database_subnets" {
   value = module.vpc.database_subnets
 }
 
+output "vpc_database_subnet_group_name" {
+  value = module.vpc.database_subnet_group_name
+}
+
 # output "security_group_public" {
 #   value = aws_security_group.public_sg.id
 # }
