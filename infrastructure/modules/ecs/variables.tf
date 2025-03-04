@@ -45,8 +45,3 @@ variable "alb_sg_id" {
   description = "The ID of the security group for the ALB"
   type        = string
 }
-
-variable "autoscaling_group_arn" {
-  description = "The ARN of the Auto Scaling Group"
-  type        = string
-}

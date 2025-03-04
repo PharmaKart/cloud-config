@@ -75,39 +75,39 @@ module "rds" {
   rds_instance_class         = var.db_instance_class
   eks_node_security_group_id = module.eks.node_security_group_id
   bastion_sg_id              = module.bastion.bastion_sg_id
-  depends_on                 = [module.vpc, module.eks]
+  bastion_public_ip          = module.bastion.bastion_public_ip
+  bastion_private_key_path   = var.bastion_private_key_path
+  depends_on                 = [module.vpc, module.eks, module.bastion]
 }
 
 # // Deploying Frontend Application Load Balancer module
-# module "alb" {
-#   source         = "./modules/alb"
-#   alb_name       = var.frontend_alb_name
-#   vpc_id         = module.vpc.vpc_id
-#   public_subnets = module.vpc.vpc_public_subnets
-#   frontend_port  = var.frontend_port
-#   depends_on     = [module.vpc]
-# }
+module "alb" {
+  source         = "./modules/alb"
+  alb_name       = var.frontend_alb_name
+  vpc_id         = module.vpc.vpc_id
+  public_subnets = module.vpc.vpc_public_subnets
+  frontend_port  = var.frontend_port
+  depends_on     = [module.vpc]
+}
 
-# // Deploying the ECS module
-# module "ecs" {
-#   source                = "./modules/ecs"
-#   cluster_name          = var.ecs_cluster_name
-#   container_name        = var.frontend_container_name
-#   container_image       = var.frontend_container_image
-#   container_port        = var.frontend_port
-#   autoscaling_group_arn = module.asg.autoscaling_group_arn
-#   container_environment = [
-#     {
-#       name  = "BACKEND_URL",
-#       value = "http://ashutoshportfolio.site"
-#       # value = "http://${module.ingress-lb.load_balancer_hostname}"
-#     }
-#   ]
-#   target_group_arn = module.alb.alb_target_group_arn
-#   vpc_id           = module.vpc.vpc_id
-#   subnet_ids       = slice(module.vpc.vpc_private_subnets, 0, 2)
-#   alb_sg_id        = module.alb.alb_sg_id
-#   depends_on       = [module.vpc, module.alb]
-#   # depends_on       = [module.vpc, module.alb, module.ingress-lb]
-# }
+// Deploying the ECS module
+module "ecs" {
+  source          = "./modules/ecs"
+  cluster_name    = var.ecs_cluster_name
+  container_name  = var.frontend_container_name
+  container_image = var.frontend_container_image
+  container_port  = var.frontend_port
+  container_environment = [
+    {
+      name  = "BACKEND_URL",
+      value = "http://ashutoshportfolio.site"
+      # value = "http://${module.ingress-lb.load_balancer_hostname}"
+    }
+  ]
+  target_group_arn = module.alb.alb_target_group_arn
+  vpc_id           = module.vpc.vpc_id
+  subnet_ids       = slice(module.vpc.vpc_private_subnets, 0, 2)
+  alb_sg_id        = module.alb.alb_sg_id
+  depends_on       = [module.vpc, module.alb, module.ingress-lb]
+}
 

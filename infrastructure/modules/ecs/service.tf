@@ -6,29 +6,27 @@ module "ecs_service" {
 
   cluster_arn = module.ecs_cluster.arn
 
-  memory = 512
-  cpu    = 256
+  cpu    = 1024
+  memory = 4096
 
-  requires_compatibilities = ["EC2"]
-  capacity_provider_strategy = {
-    spot = {
-      capacity_provider = module.ecs_cluster.autoscaling_capacity_providers["spot"].name
-      weight            = 1
-      base              = 1
-    }
-  }
+  enable_execute_command = true
 
   container_definitions = {
     (var.container_name) = {
-      image = var.container_image
-      memory = 512
+      cpu       = 512
+      memory    = 1024
+      essential = true
+      image     = var.container_image
       port_mappings = [
         {
           name          = var.container_name
           containerPort = var.container_port
+          hostPort      = var.container_port
           protocol      = "tcp"
         }
       ]
+
+      readonly_root_filesystem = true
 
       environment = var.container_environment
 
@@ -40,6 +38,8 @@ module "ecs_service" {
       log_configuration = {
         logDriver = "awslogs"
       }
+
+      memory_reservation = 100
     }
   }
 
@@ -57,6 +57,11 @@ module "ecs_service" {
 
   security_group_ids = [aws_security_group.ecs_service_sg.id]
 
+  service_tags = {
+    Name      = "${var.cluster_name}-service"
+    Project   = "Pharmakart"
+    ManagedBy = "Terraform"
+  }
 
 
   tags = {

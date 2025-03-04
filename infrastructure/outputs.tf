@@ -13,7 +13,7 @@ output "database_endpoint" {
   value       = module.rds.instance_endpoint
 }
 
-# output "frontend_endpoint" {
-#   description = "The endpoint of the frontend service"
-#   value       = module.alb.alb_dns_name
-# }
+output "frontend_endpoint" {
+  description = "The endpoint of the frontend service"
+  value       = module.alb.alb_dns_name
+}

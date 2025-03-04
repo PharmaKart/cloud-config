@@ -57,3 +57,13 @@ variable "bastion_sg_id" {
   description = "Security group ID of the Bastion host"
   type        = string
 }
+
+variable "bastion_private_key_path" {
+  description = "The path to the private key for the Bastion host"
+  type        = string
+}
+
+variable "bastion_public_ip" {
+  description = "The public IP address of the Bastion host"
+  type        = string
+}
