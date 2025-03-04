@@ -25,6 +25,19 @@ resource "aws_vpc_security_group_ingress_rule" "database_ingress" {
   }
 }
 
+resource "aws_vpc_security_group_ingress_rule" "database_ingress_bastion" {
+  security_group_id            = aws_security_group.database_sg.id
+  from_port                    = var.db_port
+  to_port                      = var.db_port
+  ip_protocol                  = "tcp"
+  referenced_security_group_id = var.bastion_sg_id
+  description                  = "Allow Bastion access to the database"
+
+  tags = {
+    Name = "Bastion DB ${var.db_port}"
+  }
+}
+
 resource "aws_vpc_security_group_egress_rule" "database_egress" {
   security_group_id = aws_security_group.database_sg.id
   ip_protocol       = "-1"

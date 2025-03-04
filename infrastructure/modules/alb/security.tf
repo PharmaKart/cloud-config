@@ -1,11 +1,11 @@
 # Security Group for the Application Load Balancer
 resource "aws_security_group" "alb_sg" {
   vpc_id      = var.vpc_id
-  name        = "${var.cluster_name}-alb-sg"
-  description = "Security group for Backend Application Load Balancer"
+  name        = "${var.alb_name}-sg"
+  description = "Security group for Frontend Application Load Balancer"
 
   tags = {
-    Name      = "${var.cluster_name}-alb-sg"
+    Name      = "${var.alb_name}-sg"
     Project   = "Pharmakart"
     ManagedBy = "Terraform"
   }
