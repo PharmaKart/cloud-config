@@ -18,6 +18,16 @@ variable "rds_instance_class" {
   type        = string
 }
 
+variable "db_engine_version" {
+  description = "The version of the database"
+  type        = string
+}
+
+variable "db_major_engine_version" {
+  description = "The major version of the database"
+  type        = string
+}
+
 variable "db_name" {
   description = "The name of the database to create"
   type        = string
@@ -40,5 +50,10 @@ variable "db_port" {
 
 variable "db_subnet_group_name" {
   description = "The name of the database subnet group"
+  type        = string
+}
+
+variable "bastion_sg_id" {
+  description = "Security group ID of the Bastion host"
   type        = string
 }

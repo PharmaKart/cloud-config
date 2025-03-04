@@ -5,10 +5,37 @@ module "eks" {
   cluster_name    = var.cluster_name
   cluster_version = var.cluster_version
 
+  access_entries = {
+    bastion_access = {
+      principal_arn = var.bastion_role_arn
+
+      policy_associations = {
+        admin_access = {
+          policy_arn = "arn:aws:eks::aws:cluster-access-policy/AmazonEKSClusterAdminPolicy"
+
+          access_scope = {
+            type = "cluster"
+          }
+        }
+      }
+    }
+  }
+
   cluster_endpoint_private_access = true
   cluster_endpoint_public_access  = true
 
   enable_cluster_creator_admin_permissions = true
+
+  cluster_security_group_additional_rules = {
+    bastion_to_eks = {
+      description              = "Allow bastion to communicate with EKS Control Plane"
+      from_port                = 443
+      to_port                  = 443
+      protocol                 = "tcp"
+      source_security_group_id = var.bastion_sg_id
+      type                     = "ingress"
+    }
+  }
 
 
   cluster_addons = {

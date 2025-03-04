@@ -10,10 +10,12 @@ database_port = 5432
 eks_cluster_name    = "pharmakart-eks"
 eks_cluster_version = "1.32"
 
-db_instance_class = "db.t3.micro"
-db_name           = "pharmakartdb"
-db_username       = "postgres"
-db_password       = "postgres"
+db_instance_class       = "db.t3.micro"
+db_engine_version       = "16.5"
+db_major_engine_version = "16"
+db_name                 = "pharmakartdb"
+db_username             = "postgres"
+db_password             = "postgres"
 
 bucket_name = "pharmakart-bucket"
 s3_folders  = ["products", "prescriptions"]
@@ -25,3 +27,7 @@ asg_name = "pharmakart-asg"
 ecs_cluster_name         = "pharmakart-ecs"
 frontend_container_name  = "pharmakart-frontend"
 frontend_container_image = "docker.io/asrma7/nodetest:latest"
+
+allowed_ssh_cidr      = ["0.0.0.0/0"] // Your IP address
+bastion_instance_type = "t3.micro"
+bastion_name          = "pharmakart-bastion"

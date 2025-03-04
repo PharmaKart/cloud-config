@@ -27,3 +27,13 @@ variable "s3_bucket_arn" {
   description = "The ARN of the S3 bucket"
   type        = string
 }
+
+variable "bastion_sg_id" {
+  description = "The ID of the Bastion Security Group"
+  type        = string
+}
+
+variable "bastion_role_arn" {
+  description = "The ARN of the Bastion IAM Role"
+  type        = string
+}

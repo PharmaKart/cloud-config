@@ -20,7 +20,7 @@ resource "aws_vpc_security_group_ingress_rule" "alb_http_ingress" {
   description       = "Allow HTTP traffic"
 
   tags = {
-    Name = "ALB HTTP 80"
+    Name = "HTTP"
   }
 }
 
@@ -33,7 +33,7 @@ resource "aws_vpc_security_group_ingress_rule" "alb_https_ingress" {
   description       = "Allow HTTPS traffic"
 
   tags = {
-    Name = "ALB HTTPS 443"
+    Name = "HTTPS"
   }
 }
 

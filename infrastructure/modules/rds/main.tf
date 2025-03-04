@@ -5,8 +5,8 @@ module "rds" {
   identifier = var.db_name
 
   engine                   = "postgres"
-  engine_version           = "16.3"
-  major_engine_version     = "16"
+  engine_version           = var.db_engine_version
+  major_engine_version     = var.db_major_engine_version
   engine_lifecycle_support = "open-source-rds-extended-support-disabled"
   family                   = "postgres16"
 
@@ -22,6 +22,8 @@ module "rds" {
   storage_type          = "gp3"
 
   iam_database_authentication_enabled = false
+
+  manage_master_user_password = false
 
   vpc_security_group_ids = [aws_security_group.database_sg.id]
 

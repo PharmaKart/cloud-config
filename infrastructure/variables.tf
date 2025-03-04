@@ -62,6 +62,16 @@ variable "db_password" {
   type        = string
 }
 
+variable "db_engine_version" {
+  description = "The version of the database"
+  type        = string
+}
+
+variable "db_major_engine_version" {
+  description = "The major version of the database"
+  type        = string
+}
+
 variable "bucket_name" {
   description = "The name of the S3 bucket"
   type        = string
@@ -94,5 +104,20 @@ variable "frontend_container_name" {
 
 variable "frontend_container_image" {
   description = "The image to use for the frontend container"
+  type        = string
+}
+
+variable "bastion_instance_type" {
+  description = "The instance type for the Bastion host"
+  type        = string
+}
+
+variable "allowed_ssh_cidr" {
+  description = "CIDR blocks allowed to SSH into the Bastion host"
+  type        = list(string)
+}
+
+variable "bastion_name" {
+  description = "The name of the Bastion host"
   type        = string
 }
