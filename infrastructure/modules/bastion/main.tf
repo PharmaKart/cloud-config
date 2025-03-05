@@ -33,6 +33,18 @@ resource "aws_instance" "bastion" {
     echo 'export PATH=$HOME/.local/bin:$PATH' >> ~/.bashrc
   EOS
 
+  # Install vim
+  sudo yum install -y vim
+
+  # configure .vimrc
+  sudo -u ec2-user bash << 'EOS'
+    echo 'set number' >> ~/.vimrc
+    echo 'set relativenumber' >> ~/.vimrc
+    echo 'set tabstop=2' >> ~/.vimrc
+    echo 'set shiftwidth=2' >> ~/.vimrc
+    echo 'set expandtab' >> ~/.vimrc
+  EOS
+
   # Install kubectl
   curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
   chmod +x kubectl

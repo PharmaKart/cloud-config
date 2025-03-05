@@ -31,7 +31,7 @@ spec:
               memory: "256Mi"
               cpu: "250m"
           env:
-            - name: GATEWAY_PORT
+            - name: PORT
               value: "8080"
             - name: AUTH_SERVICE_URL
               value: "authentication-service:50051"

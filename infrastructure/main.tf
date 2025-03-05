@@ -111,3 +111,32 @@ module "ecs" {
   depends_on       = [module.vpc, module.alb, module.ingress-lb]
 }
 
+// Deploying the K8s Manifests module
+module "k8s-manifests" {
+  source                  = "./modules/k8s-manifests"
+  backend_port            = var.backend_port
+  frontend_endpoint       = "http://${module.alb.alb_dns_name}"
+  database_endpoint       = module.rds.instance_endpoint
+  stripe_webhook_secret   = var.stripe_webhook_secret
+  stripe_secret_key       = var.stripe_secret_key
+  jwt_secret              = var.jwt_secret
+  sns_topic_arn           = "your-sns-topic-arn"
+  sqs_queue_url           = "your-sqs-queue-url"
+  db_port                 = var.database_port
+  db_user                 = var.db_username
+  db_password             = var.db_password
+  db_name                 = var.db_name
+  gateway_replicas        = var.gateway_replicas
+  gateway_image           = var.gateway_image
+  authentication_replicas = var.authentication_replicas
+  authentication_image    = var.authentication_image
+  product_replicas        = var.product_replicas
+  product_image           = var.product_image
+  order_replicas          = var.order_replicas
+  order_image             = var.order_image
+  payment_replicas        = var.payment_replicas
+  payment_image           = var.payment_image
+  reminder_replicas       = var.reminder_replicas
+  reminder_image          = var.reminder_image
+  depends_on              = [module.vpc, module.eks, module.rds, module.alb, module.ingress-lb, module.ecs]
+}

@@ -31,3 +31,20 @@ frontend_container_image = "docker.io/asrma7/nodetest:latest"
 allowed_ssh_cidr      = ["0.0.0.0/0"] // Your IP address
 bastion_instance_type = "t3.micro"
 bastion_name          = "pharmakart-bastion"
+
+stripe_webhook_secret = "your-stripe-webhook-secret"
+stripe_secret_key     = "your-stripe-secret-key"
+jwt_secret            = "your-jwt-secret"
+
+gateway_replicas        = 1
+gateway_image           = "719150847619.dkr.ecr.ca-central-1.amazonaws.com/pharmakart/gateway-svc:ea9a291"
+authentication_replicas = 1
+authentication_image    = "719150847619.dkr.ecr.ca-central-1.amazonaws.com/pharmakart/authentication-svc:7209dfa"
+product_replicas        = 1
+product_image           = "719150847619.dkr.ecr.ca-central-1.amazonaws.com/pharmakart/product-svc:c79e137"
+order_replicas          = 1
+order_image             = "719150847619.dkr.ecr.ca-central-1.amazonaws.com/pharmakart/order-svc:f3b3bba"
+payment_replicas        = 1
+payment_image           = "719150847619.dkr.ecr.ca-central-1.amazonaws.com/pharmakart/payment-svc:7a11d6d"
+reminder_replicas       = 1
+reminder_image          = "719150847619.dkr.ecr.ca-central-1.amazonaws.com/pharmakart/reminder-svc:01eeeb0"
