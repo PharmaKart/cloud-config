@@ -49,13 +49,6 @@ resource "aws_instance" "bastion" {
   curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
   chmod +x kubectl
   sudo mv kubectl /usr/local/bin/
-
-  # Create a script to configure kubectl later
-  echo '#!/bin/bash' > /home/ec2-user/configure-kubectl.sh
-  echo 'aws eks update-kubeconfig --region ${var.aws_region} --name ${var.eks_cluster_name}' >> /home/ec2-user/configure-kubectl.sh
-  chmod +x /home/ec2-user/configure-kubectl.sh
-
-  echo "EKS is not available yet. Run /home/ec2-user/configure-kubectl.sh after EKS is deployed."
 EOF
 
   tags = {

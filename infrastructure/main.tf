@@ -36,16 +36,20 @@ module "s3" {
 
 // Deploying the EKS module
 module "eks" {
-  source           = "./modules/eks"
-  cluster_name     = var.eks_cluster_name
-  cluster_version  = var.eks_cluster_version
-  vpc_id           = module.vpc.vpc_id
-  subnet_ids       = slice(module.vpc.vpc_private_subnets, 2, 4)
-  backend_port     = var.backend_port
-  s3_bucket_arn    = module.s3.bucket_arn
-  bastion_sg_id    = module.bastion.bastion_sg_id
-  bastion_role_arn = module.bastion.bastion_role_arn
-  depends_on       = [module.vpc, module.s3, module.bastion]
+  source                   = "./modules/eks"
+  cluster_name             = var.eks_cluster_name
+  cluster_version          = var.eks_cluster_version
+  vpc_id                   = module.vpc.vpc_id
+  aws_region               = var.default_region
+  subnet_ids               = slice(module.vpc.vpc_private_subnets, 2, 4)
+  backend_port             = var.backend_port
+  s3_bucket_arn            = module.s3.bucket_arn
+  bastion_sg_id            = module.bastion.bastion_sg_id
+  bastion_role_arn         = module.bastion.bastion_role_arn
+  bastion_instance_id      = module.bastion.bastion_id
+  bastion_public_ip        = module.bastion.bastion_public_ip
+  bastion_private_key_path = var.bastion_private_key_path
+  depends_on               = [module.vpc, module.s3, module.bastion]
 }
 
 // Deploying the Ingress Load Balancer module

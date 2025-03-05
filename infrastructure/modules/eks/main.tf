@@ -73,3 +73,25 @@ module "eks" {
     ManagedBy = "Terraform"
   }
 }
+
+resource "null_resource" "configure_kubectl" {
+  # Ensure this runs after both the bastion and EKS cluster are created
+  depends_on = [module.eks]
+
+  # Provisioner to configure kubectl directly
+  provisioner "remote-exec" {
+    inline = [
+      "aws eks update-kubeconfig --region ${var.aws_region} --name ${var.cluster_name}"
+    ]
+
+    connection {
+      type        = "ssh"
+      user        = "ec2-user"
+      private_key = var.bastion_private_key_path != "" ? file(var.bastion_private_key_path) : file("~/.ssh/id_rsa")
+      host        = var.bastion_public_ip
+    }
+  }
+  triggers = {
+    bastion_instance_id = var.bastion_instance_id
+  }
+}
