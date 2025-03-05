@@ -126,3 +126,78 @@ variable "bastion_private_key_path" {
   description = "The path to the private key for the Bastion host (Empty string to ~/.ssh/id_rsa)"
   type        = string
 }
+
+variable "stripe_webhook_secret" {
+  description = "The secret for the stripe webhook"
+  type        = string
+}
+
+variable "stripe_secret_key" {
+  description = "The secret key for stripe"
+  type        = string
+}
+
+variable "jwt_secret" {
+  description = "The secret for the JWT"
+  type        = string
+}
+
+variable "gateway_replicas" {
+  description = "The number of replicas for the gateway service"
+  type        = number
+}
+
+variable "gateway_image" {
+  description = "The image for the gateway service"
+  type        = string
+}
+
+variable "authentication_replicas" {
+  description = "The number of replicas for the authentication service"
+  type        = number
+}
+
+variable "authentication_image" {
+  description = "The image for the authentication service"
+  type        = string
+}
+
+variable "product_replicas" {
+  description = "The number of replicas for the product service"
+  type        = number
+}
+
+variable "product_image" {
+  description = "The image for the product service"
+  type        = string
+}
+
+variable "order_replicas" {
+  description = "The number of replicas for the order service"
+  type        = number
+}
+
+variable "order_image" {
+  description = "The image for the order service"
+  type        = string
+}
+
+variable "payment_replicas" {
+  description = "The number of replicas for the payment service"
+  type        = number
+}
+
+variable "payment_image" {
+  description = "The image for the payment service"
+  type        = string
+}
+
+variable "reminder_replicas" {
+  description = "The number of replicas for the reminder service"
+  type        = number
+}
+
+variable "reminder_image" {
+  description = "The image for the reminder service"
+  type        = string
+}
