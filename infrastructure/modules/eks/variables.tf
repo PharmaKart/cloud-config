@@ -13,6 +13,11 @@ variable "vpc_id" {
   type        = string
 }
 
+variable "aws_region" {
+  description = "The AWS region"
+  type        = string
+}
+
 variable "subnet_ids" {
   description = "The IDs of the subnets"
   type        = list(string)
@@ -35,5 +40,20 @@ variable "bastion_sg_id" {
 
 variable "bastion_role_arn" {
   description = "The ARN of the Bastion IAM Role"
+  type        = string
+}
+
+variable "bastion_instance_id" {
+  description = "The ID of the Bastion Instance"
+  type        = string
+}
+
+variable "bastion_public_ip" {
+  description = "The public IP of the Bastion Instance"
+  type        = string
+}
+
+variable "bastion_private_key_path" {
+  description = "The path to the private key for the Bastion Instance"
   type        = string
 }
