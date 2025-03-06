@@ -7,7 +7,7 @@ resource "aws_iam_policy" "eks_nodes_s3_policy" {
     Statement = [
       {
         Effect = "Allow",
-        Action = ["s3:GetObject", "s3:ListBucket"],
+        Action = ["s3:GetObject", "s3:ListBucket", "s3:PutObject"],
         Resource = [
           var.s3_bucket_arn,
           "${var.s3_bucket_arn}/*"

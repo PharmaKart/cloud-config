@@ -1,3 +1,9 @@
+variable "aws_region" {
+  description = "The AWS region"
+  type        = string
+
+}
+
 variable "database_endpoint" {
   description = "The endpoint of the database"
   type        = string
@@ -55,6 +61,11 @@ variable "db_password" {
 
 variable "db_name" {
   description = "The name of the database"
+  type        = string
+}
+
+variable "s3_bucket_name" {
+  description = "The name of the S3 bucket"
   type        = string
 }
 

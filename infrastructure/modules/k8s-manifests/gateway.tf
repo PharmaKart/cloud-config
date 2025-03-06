@@ -81,6 +81,16 @@ resource "kubernetes_deployment" "gateway" {
             name  = "STRIPE_WEBHOOK_SECRET"
             value = var.stripe_webhook_secret
           }
+
+          env {
+            name  = "S3_BUCKET_NAME"
+            value = var.s3_bucket_name
+          }
+
+          env {
+            name  = "AWS_REGION"
+            value = var.aws_region
+          }
         }
       }
     }

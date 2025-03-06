@@ -37,7 +37,7 @@ stripe_secret_key     = "your-stripe-secret-key"
 jwt_secret            = "your-jwt-secret"
 
 gateway_replicas        = 1
-gateway_image           = "719150847619.dkr.ecr.ca-central-1.amazonaws.com/pharmakart/gateway-svc:ea9a291"
+gateway_image           = "719150847619.dkr.ecr.ca-central-1.amazonaws.com/pharmakart/gateway-svc:cb1e4c3"
 authentication_replicas = 1
 authentication_image    = "719150847619.dkr.ecr.ca-central-1.amazonaws.com/pharmakart/authentication-svc:c47e78c"
 product_replicas        = 1
