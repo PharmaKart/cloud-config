@@ -145,3 +145,12 @@ module "k8s-manifests" {
   reminder_image          = var.reminder_image
   depends_on              = [module.vpc, module.eks, module.rds, module.alb, module.ingress-lb, module.ecs]
 }
+
+// Deploy CodeBuild module
+module "codebuild" {
+  source                = "./modules/codebuild"
+  account_id            = var.account_id
+  aws_region            = var.default_region
+  build_projects        = var.build_projects
+  source_connection_arn = var.source_connection_arn
+}

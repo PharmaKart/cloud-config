@@ -3,6 +3,11 @@ variable "default_region" {
   type        = string
 }
 
+variable "account_id" {
+  description = "The account ID to deploy resources"
+  type        = string
+}
+
 locals {
   cidr_subnets = cidrsubnets(var.vpc_cidr, 8, 8, 8, 8, 8, 8, 8, 8)
 }
@@ -84,11 +89,6 @@ variable "s3_folders" {
 
 variable "frontend_alb_name" {
   description = "The name of the Frontend Application Load Balancer"
-  type        = string
-}
-
-variable "asg_name" {
-  description = "The name of the Auto Scaling Group"
   type        = string
 }
 
@@ -199,5 +199,18 @@ variable "reminder_replicas" {
 
 variable "reminder_image" {
   description = "The image for the reminder service"
+  type        = string
+}
+
+variable "build_projects" {
+  description = "The list of projects to build"
+  type = map(object({
+    repository = string
+    image      = string
+  }))
+}
+
+variable "source_connection_arn" {
+  description = "The connection ARN to the source repository"
   type        = string
 }
