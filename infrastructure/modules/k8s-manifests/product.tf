@@ -1,3 +1,37 @@
+# ConfigMap for non-sensitive configuration
+resource "kubernetes_config_map" "product_config" {
+  metadata {
+    name = "product-config"
+    labels = {
+      app = "pharmakart"
+    }
+  }
+
+  data = {
+    DB_HOST = var.database_endpoint
+    DB_PORT = var.db_port
+    DB_NAME = var.db_name
+  }
+}
+
+# Secret for sensitive configuration
+resource "kubernetes_secret" "product_secrets" {
+  metadata {
+    name = "product-secrets"
+    labels = {
+      app = "pharmakart"
+    }
+  }
+
+  data = {
+    DB_USER     = var.db_user
+    DB_PASSWORD = var.db_password
+  }
+
+  type = "Opaque"
+}
+
+# Modified Deployment to use ConfigMap and Secret
 resource "kubernetes_deployment" "product" {
   metadata {
     name = "product-deployment"
@@ -47,29 +81,18 @@ resource "kubernetes_deployment" "product" {
             }
           }
 
-          env {
-            name  = "DB_HOST"
-            value = var.database_endpoint
+          # Mount all ConfigMap values as environment variables
+          env_from {
+            config_map_ref {
+              name = kubernetes_config_map.product_config.metadata[0].name
+            }
           }
 
-          env {
-            name  = "DB_PORT"
-            value = var.db_port
-          }
-
-          env {
-            name  = "DB_USER"
-            value = var.db_user
-          }
-
-          env {
-            name  = "DB_PASSWORD"
-            value = var.db_password
-          }
-
-          env {
-            name  = "DB_NAME"
-            value = var.db_name
+          # Mount all Secret values as environment variables
+          env_from {
+            secret_ref {
+              name = kubernetes_secret.product_secrets.metadata[0].name
+            }
           }
         }
       }

@@ -104,8 +104,7 @@ module "ecs" {
   container_environment = [
     {
       name  = "BACKEND_URL",
-      value = "http://ashutoshportfolio.site"
-      # value = "http://${module.ingress-lb.load_balancer_hostname}"
+      value = "http://${module.ingress-lb.load_balancer_hostname}"
     }
   ]
   target_group_arn = module.alb.alb_target_group_arn
@@ -118,6 +117,7 @@ module "ecs" {
 // Deploying the K8s Manifests module
 module "k8s-manifests" {
   source                  = "./modules/k8s-manifests"
+  aws_region              = var.default_region
   backend_port            = var.backend_port
   frontend_endpoint       = "http://${module.alb.alb_dns_name}"
   database_endpoint       = module.rds.instance_endpoint
@@ -130,6 +130,7 @@ module "k8s-manifests" {
   db_user                 = var.db_username
   db_password             = var.db_password
   db_name                 = var.db_name
+  s3_bucket_name          = var.bucket_name
   gateway_replicas        = var.gateway_replicas
   gateway_image           = var.gateway_image
   authentication_replicas = var.authentication_replicas

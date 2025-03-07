@@ -80,8 +80,6 @@ resource "null_resource" "db_setup" {
 
   provisioner "remote-exec" {
     inline = [
-      "echo 'Waiting for RDS to be fully available...'",
-      "sleep 60", # Give RDS some time to be fully ready
       "PGPASSWORD='${var.db_password}' psql -h ${module.rds.db_instance_address} -U ${var.db_username} -d ${var.db_name} -p ${var.db_port} -f /tmp/init-database.sql",
       "echo 'Database initialization complete'",
       "rm /tmp/init-database.sql" # Clean up

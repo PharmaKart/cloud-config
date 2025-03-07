@@ -1,3 +1,41 @@
+# ConfigMap for non-sensitive configuration
+resource "kubernetes_config_map" "gateway_config" {
+  metadata {
+    name = "gateway-config"
+    labels = {
+      app = "pharmakart"
+    }
+  }
+
+  data = {
+    PORT                 = var.backend_port
+    AUTH_SERVICE_URL     = "authentication-service:50051"
+    PRODUCT_SERVICE_URL  = "product-service:50052"
+    ORDER_SERVICE_URL    = "order-service:50053"
+    PAYMENT_SERVICE_URL  = "payment-service:50054"
+    REMINDER_SERVICE_URL = "reminder-service:50055"
+    S3_BUCKET_NAME       = var.s3_bucket_name
+    AWS_REGION           = var.aws_region
+  }
+}
+
+# Secret for sensitive configuration
+resource "kubernetes_secret" "gateway_secrets" {
+  metadata {
+    name = "gateway-secrets"
+    labels = {
+      app = "pharmakart"
+    }
+  }
+
+  data = {
+    STRIPE_WEBHOOK_SECRET = var.stripe_webhook_secret
+  }
+
+  type = "Opaque"
+}
+
+# Modified Deployment to use ConfigMap and Secret
 resource "kubernetes_deployment" "gateway" {
   metadata {
     name = "gateway-deployment"
@@ -47,39 +85,18 @@ resource "kubernetes_deployment" "gateway" {
             }
           }
 
-          env {
-            name  = "PORT"
-            value = var.backend_port
+          # Mount all ConfigMap values as environment variables
+          env_from {
+            config_map_ref {
+              name = kubernetes_config_map.gateway_config.metadata[0].name
+            }
           }
 
-          env {
-            name  = "AUTH_SERVICE_URL"
-            value = "authentication-service:50051"
-          }
-
-          env {
-            name  = "PRODUCT_SERVICE_URL"
-            value = "product-service:50052"
-          }
-
-          env {
-            name  = "ORDER_SERVICE_URL"
-            value = "order-service:50053"
-          }
-
-          env {
-            name  = "PAYMENT_SERVICE_URL"
-            value = "payment-service:50054"
-          }
-
-          env {
-            name  = "REMINDER_SERVICE_URL"
-            value = "reminder-service:50055"
-          }
-
-          env {
-            name  = "STRIPE_WEBHOOK_SECRET"
-            value = var.stripe_webhook_secret
+          # Mount all Secret values as environment variables
+          env_from {
+            secret_ref {
+              name = kubernetes_secret.gateway_secrets.metadata[0].name
+            }
           }
         }
       }
