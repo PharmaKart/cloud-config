@@ -104,8 +104,7 @@ module "ecs" {
   container_environment = [
     {
       name  = "BACKEND_URL",
-      value = "http://ashutoshportfolio.site"
-      # value = "http://${module.ingress-lb.load_balancer_hostname}"
+      value = "http://${module.ingress-lb.load_balancer_hostname}"
     }
   ]
   target_group_arn = module.alb.alb_target_group_arn

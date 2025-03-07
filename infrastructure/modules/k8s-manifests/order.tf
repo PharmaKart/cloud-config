@@ -1,3 +1,40 @@
+# ConfigMap for non-sensitive configuration
+resource "kubernetes_config_map" "order_config" {
+  metadata {
+    name = "order-config"
+    labels = {
+      app = "pharmakart"
+    }
+  }
+
+  data = {
+    PORT                = "50053"
+    DB_HOST             = var.database_endpoint
+    DB_PORT             = var.db_port
+    DB_NAME             = var.db_name
+    PRODUCT_SERVICE_URL = "product-service:50052"
+    PAYMENT_SERVICE_URL = "payment-service:50054"
+  }
+}
+
+# Secret for sensitive configuration
+resource "kubernetes_secret" "order_secrets" {
+  metadata {
+    name = "order-secrets"
+    labels = {
+      app = "pharmakart"
+    }
+  }
+
+  data = {
+    DB_USER     = var.db_user
+    DB_PASSWORD = var.db_password
+  }
+
+  type = "Opaque"
+}
+
+# Modified Deployment to use ConfigMap and Secret
 resource "kubernetes_deployment" "order" {
   metadata {
     name = "order-deployment"
@@ -47,44 +84,18 @@ resource "kubernetes_deployment" "order" {
             }
           }
 
-          env {
-            name  = "DB_HOST"
-            value = var.database_endpoint
+          # Mount all ConfigMap values as environment variables
+          env_from {
+            config_map_ref {
+              name = kubernetes_config_map.order_config.metadata[0].name
+            }
           }
 
-          env {
-            name  = "DB_PORT"
-            value = var.db_port
-          }
-
-          env {
-            name  = "DB_USER"
-            value = var.db_user
-          }
-
-          env {
-            name  = "DB_PASSWORD"
-            value = var.db_password
-          }
-
-          env {
-            name  = "DB_NAME"
-            value = var.db_name
-          }
-
-          env {
-            name  = "PORT"
-            value = "50053"
-          }
-
-          env {
-            name  = "PRODUCT_SERVICE_URL"
-            value = "product-service:50052"
-          }
-
-          env {
-            name  = "PAYMENT_SERVICE_URL"
-            value = "payment-service:50054"
+          # Mount all Secret values as environment variables
+          env_from {
+            secret_ref {
+              name = kubernetes_secret.order_secrets.metadata[0].name
+            }
           }
         }
       }

@@ -1,3 +1,40 @@
+# ConfigMap for non-sensitive configuration
+resource "kubernetes_config_map" "payment_config" {
+  metadata {
+    name = "payment-config"
+    labels = {
+      app = "pharmakart"
+    }
+  }
+
+  data = {
+    PORT         = "50054"
+    DB_HOST      = var.database_endpoint
+    DB_PORT      = var.db_port
+    DB_NAME      = var.db_name
+    FRONTEND_URL = var.frontend_endpoint
+  }
+}
+
+# Secret for sensitive configuration
+resource "kubernetes_secret" "payment_secrets" {
+  metadata {
+    name = "payment-secrets"
+    labels = {
+      app = "pharmakart"
+    }
+  }
+
+  data = {
+    DB_USER           = var.db_user
+    DB_PASSWORD       = var.db_password
+    STRIPE_SECRET_KEY = var.stripe_secret_key
+  }
+
+  type = "Opaque"
+}
+
+# Modified Deployment to use ConfigMap and Secret
 resource "kubernetes_deployment" "payment" {
   metadata {
     name = "payment-deployment"
@@ -47,44 +84,18 @@ resource "kubernetes_deployment" "payment" {
             }
           }
 
-          env {
-            name  = "DB_HOST"
-            value = var.database_endpoint
+          # Mount all ConfigMap values as environment variables
+          env_from {
+            config_map_ref {
+              name = kubernetes_config_map.payment_config.metadata[0].name
+            }
           }
 
-          env {
-            name  = "DB_PORT"
-            value = var.db_port
-          }
-
-          env {
-            name  = "DB_USER"
-            value = var.db_user
-          }
-
-          env {
-            name  = "DB_PASSWORD"
-            value = var.db_password
-          }
-
-          env {
-            name  = "DB_NAME"
-            value = var.db_name
-          }
-
-          env {
-            name  = "PORT"
-            value = "50054"
-          }
-
-          env {
-            name  = "FRONTEND_URL"
-            value = var.frontend_endpoint
-          }
-
-          env {
-            name  = "STRIPE_SECRET_KEY"
-            value = var.stripe_secret_key
+          # Mount all Secret values as environment variables
+          env_from {
+            secret_ref {
+              name = kubernetes_secret.payment_secrets.metadata[0].name
+            }
           }
         }
       }
