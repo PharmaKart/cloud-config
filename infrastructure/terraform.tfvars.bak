@@ -1,4 +1,5 @@
 default_region = "ca-central-1"
+account_id     = "719150847619" // Change this to your ID
 
 vpc_cidr = "10.0.0.0/16"
 vpc_name = "pharmakart-vpc"
@@ -22,11 +23,8 @@ s3_folders  = ["products", "prescriptions"]
 
 frontend_alb_name = "pharmakart-frontend-alb"
 
-asg_name = "pharmakart-asg"
-
-ecs_cluster_name         = "pharmakart-ecs"
-frontend_container_name  = "pharmakart-frontend"
-frontend_container_image = "docker.io/asrma7/nodetest:latest"
+ecs_cluster_name        = "pharmakart-ecs"
+frontend_container_name = "pharmakart-frontend"
 
 allowed_ssh_cidr      = ["0.0.0.0/0"] // Your IP address
 bastion_instance_type = "t3.micro"
@@ -36,15 +34,53 @@ stripe_webhook_secret = "your-stripe-webhook-secret"
 stripe_secret_key     = "your-stripe-secret-key"
 jwt_secret            = "your-jwt-secret"
 
-gateway_replicas        = 1
-gateway_image           = "719150847619.dkr.ecr.ca-central-1.amazonaws.com/pharmakart/gateway-svc:cb1e4c3"
-authentication_replicas = 1
-authentication_image    = "719150847619.dkr.ecr.ca-central-1.amazonaws.com/pharmakart/authentication-svc:c47e78c"
-product_replicas        = 1
-product_image           = "719150847619.dkr.ecr.ca-central-1.amazonaws.com/pharmakart/product-svc:ae9831e"
-order_replicas          = 1
-order_image             = "719150847619.dkr.ecr.ca-central-1.amazonaws.com/pharmakart/order-svc:1449298"
-payment_replicas        = 1
-payment_image           = "719150847619.dkr.ecr.ca-central-1.amazonaws.com/pharmakart/payment-svc:1f847b0"
-reminder_replicas       = 1
-reminder_image          = "719150847619.dkr.ecr.ca-central-1.amazonaws.com/pharmakart/reminder-svc:9544f1a"
+// Change this to your repos
+gateway_replicas         = 1
+gateway_image            = "719150847619.dkr.ecr.ca-central-1.amazonaws.com/pharmakart/gateway-svc:cb1e4c3"
+authentication_replicas  = 1
+authentication_image     = "719150847619.dkr.ecr.ca-central-1.amazonaws.com/pharmakart/authentication-svc:c47e78c"
+product_replicas         = 1
+product_image            = "719150847619.dkr.ecr.ca-central-1.amazonaws.com/pharmakart/product-svc:ae9831e"
+order_replicas           = 1
+order_image              = "719150847619.dkr.ecr.ca-central-1.amazonaws.com/pharmakart/order-svc:1449298"
+payment_replicas         = 1
+payment_image            = "719150847619.dkr.ecr.ca-central-1.amazonaws.com/pharmakart/payment-svc:1f847b0"
+reminder_replicas        = 1
+reminder_image           = "719150847619.dkr.ecr.ca-central-1.amazonaws.com/pharmakart/reminder-svc:9544f1a"
+frontend_container_image = "719150847619.dkr.ecr.ca-central-1.amazonaws.com/pharmakart/frontend-svc:28d8e0a"
+
+
+build_projects = {
+  GatewaySvcProject = {
+    repository = "https://github.com/PharmaKart/gateway-svc",
+    image      = "pharmakart/gateway-svc"
+  }
+  AuthenticationSvcProject = {
+    repository = "https://github.com/PharmaKart/authentication-svc",
+    image      = "pharmakart/authentication-svc"
+  }
+  ProductSvcProject = {
+    repository = "https://github.com/PharmaKart/product-svc",
+    image      = "pharmakart/product-svc"
+  }
+  OrderSvcProject = {
+    repository = "https://github.com/PharmaKart/order-svc",
+    image      = "pharmakart/order-svc"
+  }
+  PaymentSvcProject = {
+    repository = "https://github.com/PharmaKart/payment-svc",
+    image      = "pharmakart/payment-svc"
+  }
+  ReminderSvcProject = {
+    repository = "https://github.com/PharmaKart/reminder-svc",
+    image      = "pharmakart/reminder-svc"
+  }
+  FrontendSvcProject = {
+    repository = "https://github.com/PharmaKart/frontend-svc",
+    image      = "pharmakart/frontend-svc"
+  }
+}
+
+source_connection_arn = "arn:aws:codeconnections:ca-central-1:719150847619:connection/d9e8bed7-55ec-491e-af1e-c1e3a93eac94"
+
+bastion_private_key_path = ""
