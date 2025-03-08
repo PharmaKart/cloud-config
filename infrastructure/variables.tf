@@ -207,6 +207,7 @@ variable "build_projects" {
   type = map(object({
     repository = string
     image      = string
+    type       = string
   }))
 }
 
