@@ -26,13 +26,11 @@ resource "aws_iam_policy" "codebuild-base-policy" {
     "Version" = "2012-10-17",
     "Statement" = [
       {
-        Sid      = "VisualEditor0",
         Effect   = "Allow",
         Action   = "ecr:GetAuthorizationToken",
         Resource = "*"
       },
       {
-        Sid    = "VisualEditor1",
         Effect = "Allow",
         Action = [
           "ecr:GetDownloadUrlForLayer",
@@ -61,7 +59,8 @@ resource "aws_iam_policy" "codebuild-base-policy" {
           "arn:aws:logs:${var.aws_region}:${var.account_id}:log-group:/aws/codebuild/${each.key}",
           "arn:aws:logs:${var.aws_region}:${var.account_id}:log-group:/aws/codebuild/${each.key}:*",
           "arn:aws:codebuild:${var.aws_region}:${var.account_id}:report-group/${each.key}-*",
-          "arn:aws:s3:::codepipeline-${var.aws_region}-*",
+          "${var.s3_codepipeline_bucket_arn}",
+          "${var.s3_codepipeline_bucket_arn}/*",
           "arn:aws:ecr:${var.aws_region}:${var.account_id}:repository/${each.value.image}"
         ]
       }

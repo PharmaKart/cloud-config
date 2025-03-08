@@ -49,35 +49,41 @@ reminder_replicas        = 1
 reminder_image           = "719150847619.dkr.ecr.ca-central-1.amazonaws.com/pharmakart/reminder-svc:9544f1a"
 frontend_container_image = "719150847619.dkr.ecr.ca-central-1.amazonaws.com/pharmakart/frontend-svc:28d8e0a"
 
-
 build_projects = {
   GatewaySvcProject = {
-    repository = "https://github.com/PharmaKart/gateway-svc",
-    image      = "pharmakart/gateway-svc"
+    repository = "PharmaKart/gateway-svc",
+    image      = "pharmakart/gateway-svc",
+    type       = "EKS"
   }
   AuthenticationSvcProject = {
-    repository = "https://github.com/PharmaKart/authentication-svc",
-    image      = "pharmakart/authentication-svc"
+    repository = "PharmaKart/authentication-svc",
+    image      = "pharmakart/authentication-svc",
+    type       = "EKS"
   }
   ProductSvcProject = {
-    repository = "https://github.com/PharmaKart/product-svc",
-    image      = "pharmakart/product-svc"
+    repository = "PharmaKart/product-svc",
+    image      = "pharmakart/product-svc",
+    type       = "EKS"
   }
   OrderSvcProject = {
-    repository = "https://github.com/PharmaKart/order-svc",
-    image      = "pharmakart/order-svc"
+    repository = "PharmaKart/order-svc",
+    image      = "pharmakart/order-svc",
+    type       = "EKS"
   }
   PaymentSvcProject = {
-    repository = "https://github.com/PharmaKart/payment-svc",
-    image      = "pharmakart/payment-svc"
+    repository = "PharmaKart/payment-svc",
+    image      = "pharmakart/payment-svc",
+    type       = "EKS"
   }
   ReminderSvcProject = {
-    repository = "https://github.com/PharmaKart/reminder-svc",
-    image      = "pharmakart/reminder-svc"
+    repository = "PharmaKart/reminder-svc",
+    image      = "pharmakart/reminder-svc",
+    type       = "EKS"
   }
   FrontendSvcProject = {
-    repository = "https://github.com/PharmaKart/frontend-svc",
-    image      = "pharmakart/frontend-svc"
+    repository = "PharmaKart/frontend-svc",
+    image      = "pharmakart/frontend-svc",
+    type       = "ECS"
   }
 }
 

@@ -148,9 +148,27 @@ module "k8s-manifests" {
 
 // Deploy CodeBuild module
 module "codebuild" {
-  source                = "./modules/codebuild"
-  account_id            = var.account_id
-  aws_region            = var.default_region
-  build_projects        = var.build_projects
-  source_connection_arn = var.source_connection_arn
+  source                     = "./modules/codebuild"
+  account_id                 = var.account_id
+  aws_region                 = var.default_region
+  build_projects             = var.build_projects
+  source_connection_arn      = var.source_connection_arn
+  s3_codepipeline_bucket_arn = module.s3.codepipeline_bucket_arn
+  frontend_container_name    = var.frontend_container_name
+  depends_on                 = [module.s3]
+}
+
+// Deploy CodePipeline module
+module "codepipeline" {
+  source                     = "./modules/codepipeline"
+  account_id                 = var.account_id
+  aws_region                 = var.default_region
+  source_connection_arn      = var.source_connection_arn
+  s3codepipeline_bucket      = module.s3.codepipeline_bucket
+  s3_codepipeline_bucket_arn = module.s3.codepipeline_bucket_arn
+  eks_cluster_name           = var.eks_cluster_name
+  ecs_cluster_name           = var.ecs_cluster_name
+  build_projects             = var.build_projects
+  frontend_container_name    = var.frontend_container_name
+  depends_on                 = [module.codebuild, module.s3, module.eks, module.ecs]
 }
