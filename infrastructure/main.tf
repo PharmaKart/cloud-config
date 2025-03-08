@@ -114,7 +114,7 @@ module "ecs" {
   container_port  = var.frontend_port
   container_environment = [
     {
-      name  = "BACKEND_URL",
+      name  = "NEXT_PUBLIC_BACKEND_URL",
       value = "http://${module.ingress-lb.load_balancer_hostname}"
     }
   ]
