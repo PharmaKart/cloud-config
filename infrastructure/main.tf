@@ -1,6 +1,7 @@
+// Get AWS Availability Zones in current region
 data "aws_availability_zones" "azs" {}
 
-// Deploying the VPC module
+// Deploy VPC module
 module "vpc" {
   source                = "./modules/vpc"
   vpc_cidr              = var.vpc_cidr
@@ -14,7 +15,7 @@ module "vpc" {
   database_port         = var.database_port
 }
 
-// Deploying the Bastion module
+// Deploy Bastion module
 module "bastion" {
   source           = "./modules/bastion"
   instance_type    = var.bastion_instance_type
@@ -27,14 +28,24 @@ module "bastion" {
   depends_on       = [module.vpc]
 }
 
-// Deploying the S3 module
+// Deploy ECR module
+locals {
+  # Extract all images and remove the "pharmakart/" prefix if needed
+  repository_names = [for project in var.build_projects : project.image]
+}
+module "ecr" {
+  source           = "./modules/ecr"
+  repository_names = local.repository_names
+}
+
+// Deploy S3 module
 module "s3" {
   source      = "./modules/s3"
   bucket_name = var.bucket_name
   s3_folders  = var.s3_folders
 }
 
-// Deploying the EKS module
+// Deploy EKS module
 module "eks" {
   source                   = "./modules/eks"
   cluster_name             = var.eks_cluster_name
@@ -52,7 +63,7 @@ module "eks" {
   depends_on               = [module.vpc, module.s3, module.bastion]
 }
 
-// Deploying the Ingress Load Balancer module
+// Deploy Ingress Load Balancer module
 module "ingress-lb" {
   source                 = "./modules/ingress-lb"
   cluster_name           = var.eks_cluster_name
@@ -64,7 +75,7 @@ module "ingress-lb" {
   depends_on             = [module.vpc, module.eks]
 }
 
-// Deploying the RDS module
+// Deploy RDS module
 module "rds" {
   source                     = "./modules/rds"
   vpc_id                     = module.vpc.vpc_id
@@ -84,7 +95,7 @@ module "rds" {
   depends_on                 = [module.vpc, module.eks, module.bastion]
 }
 
-# // Deploying Frontend Application Load Balancer module
+# // Deploy Frontend Application Load Balancer module
 module "alb" {
   source         = "./modules/alb"
   alb_name       = var.frontend_alb_name
@@ -94,7 +105,7 @@ module "alb" {
   depends_on     = [module.vpc]
 }
 
-// Deploying the ECS module
+// Deploy ECS module
 module "ecs" {
   source          = "./modules/ecs"
   cluster_name    = var.ecs_cluster_name
@@ -114,7 +125,7 @@ module "ecs" {
   depends_on       = [module.vpc, module.alb, module.ingress-lb]
 }
 
-// Deploying the K8s Manifests module
+// Deploy K8s Manifests module
 module "k8s-manifests" {
   source                  = "./modules/k8s-manifests"
   aws_region              = var.default_region
@@ -170,5 +181,5 @@ module "codepipeline" {
   ecs_cluster_name           = var.ecs_cluster_name
   build_projects             = var.build_projects
   frontend_container_name    = var.frontend_container_name
-  depends_on                 = [module.codebuild, module.s3, module.eks, module.ecs]
+  depends_on                 = [module.codebuild, module.s3, module.eks, module.ecs, module.k8s-manifests]
 }
