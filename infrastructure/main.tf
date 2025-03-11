@@ -161,7 +161,7 @@ module "codebuild" {
   source_connection_arn      = var.source_connection_arn
   s3_codepipeline_bucket_arn = module.s3.codepipeline_bucket_arn
   frontend_container_name    = var.frontend_container_name
-  backend_url                = module.ingress-lb.load_balancer_hostname
+  backend_url                = "http://${module.ingress-lb.load_balancer_hostname}"
   depends_on                 = [module.s3]
 }
 
@@ -175,6 +175,7 @@ module "codepipeline" {
   s3_codepipeline_bucket_arn = module.s3.codepipeline_bucket_arn
   eks_cluster_name           = var.eks_cluster_name
   ecs_cluster_name           = var.ecs_cluster_name
+  backend_url                = "http://${module.ingress-lb.load_balancer_hostname}"
   build_projects             = var.build_projects
   frontend_container_name    = var.frontend_container_name
   depends_on                 = [module.codebuild, module.s3, module.eks, module.ecs, module.k8s-manifests]

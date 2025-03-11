@@ -82,6 +82,11 @@ resource "aws_codepipeline" "codepipeline" {
                 "name" : "CONTAINER_NAME",
                 "value" : var.frontend_container_name,
                 "type" : "PLAINTEXT"
+              },
+              {
+                "name" : "NEXT_PUBLIC_BACKEND_URL",
+                "value" : var.backend_url,
+                "type" : "PLAINTEXT"
               }
             ] : []
           )
