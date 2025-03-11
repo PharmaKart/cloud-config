@@ -107,22 +107,17 @@ module "alb" {
 
 // Deploy ECS module
 module "ecs" {
-  source          = "./modules/ecs"
-  cluster_name    = var.ecs_cluster_name
-  container_name  = var.frontend_container_name
-  container_image = var.frontend_container_image
-  container_port  = var.frontend_port
-  container_environment = [
-    {
-      name  = "NEXT_PUBLIC_BACKEND_URL",
-      value = "http://${module.ingress-lb.load_balancer_hostname}"
-    }
-  ]
-  target_group_arn = module.alb.alb_target_group_arn
-  vpc_id           = module.vpc.vpc_id
-  subnet_ids       = slice(module.vpc.vpc_private_subnets, 0, 2)
-  alb_sg_id        = module.alb.alb_sg_id
-  depends_on       = [module.vpc, module.alb, module.ingress-lb]
+  source                = "./modules/ecs"
+  cluster_name          = var.ecs_cluster_name
+  container_name        = var.frontend_container_name
+  container_image       = var.frontend_container_image
+  container_port        = var.frontend_port
+  container_environment = []
+  target_group_arn      = module.alb.alb_target_group_arn
+  vpc_id                = module.vpc.vpc_id
+  subnet_ids            = slice(module.vpc.vpc_private_subnets, 0, 2)
+  alb_sg_id             = module.alb.alb_sg_id
+  depends_on            = [module.vpc, module.alb, module.ingress-lb]
 }
 
 // Deploy K8s Manifests module
@@ -166,6 +161,7 @@ module "codebuild" {
   source_connection_arn      = var.source_connection_arn
   s3_codepipeline_bucket_arn = module.s3.codepipeline_bucket_arn
   frontend_container_name    = var.frontend_container_name
+  backend_url                = module.ingress-lb.load_balancer_hostname
   depends_on                 = [module.s3]
 }
 

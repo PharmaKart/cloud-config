@@ -28,6 +28,13 @@ resource "aws_codebuild_project" "codebuild" {
         value = "frontend-container"
       }
     }
+    dynamic "environment_variable" {
+      for_each = each.key == "FrontendSvcProject" ? [1] : []
+      content {
+        name  = "NEXT_PUBLIC_BACKEND_URL"
+        value = var.backend_url
+      }
+    }
   }
   service_role = aws_iam_role.codebuild-service-role[each.key].arn
   source {
