@@ -38,6 +38,11 @@ variable "frontend_container_name" {
   type        = string
 }
 
+variable "backend_url" {
+  description = "The URL of the backend load balancer"
+  type        = string
+}
+
 variable "build_projects" {
   description = "The list of build projects"
   type = map(object({
