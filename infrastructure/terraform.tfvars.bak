@@ -47,7 +47,7 @@ payment_replicas         = 1
 payment_image            = "docker.io/crccheck/hello-world"
 reminder_replicas        = 1
 reminder_image           = "docker.io/crccheck/hello-world"
-frontend_container_image = "docker.io/crccheck/hello-world"
+frontend_container_image = "docker.io/asrma7/nodetest"
 
 build_projects = {
   GatewaySvcProject = {

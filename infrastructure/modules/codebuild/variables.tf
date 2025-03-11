@@ -30,3 +30,9 @@ variable "frontend_container_name" {
   description = "The name of the frontend container"
   type        = string
 }
+
+variable "backend_url" {
+  description = "The URL of the backend load balancer"
+  type        = string
+
+}
