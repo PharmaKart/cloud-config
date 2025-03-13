@@ -3,11 +3,6 @@ variable "default_region" {
   type        = string
 }
 
-variable "account_id" {
-  description = "The account ID to deploy resources"
-  type        = string
-}
-
 locals {
   cidr_subnets = cidrsubnets(var.vpc_cidr, 8, 8, 8, 8, 8, 8, 8, 8)
 }

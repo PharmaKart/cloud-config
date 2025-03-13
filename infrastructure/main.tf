@@ -1,6 +1,8 @@
 // Get AWS Availability Zones in current region
 data "aws_availability_zones" "azs" {}
 
+data "aws_caller_identity" "current" {}
+
 // Deploy VPC module
 module "vpc" {
   source                = "./modules/vpc"
@@ -155,7 +157,7 @@ module "k8s-manifests" {
 // Deploy CodeBuild module
 module "codebuild" {
   source                     = "./modules/codebuild"
-  account_id                 = var.account_id
+  account_id                 = data.aws_caller_identity.current.account_id
   aws_region                 = var.default_region
   build_projects             = var.build_projects
   source_connection_arn      = var.source_connection_arn
@@ -168,7 +170,7 @@ module "codebuild" {
 // Deploy CodePipeline module
 module "codepipeline" {
   source                     = "./modules/codepipeline"
-  account_id                 = var.account_id
+  account_id                 = data.aws_caller_identity.current.account_id
   aws_region                 = var.default_region
   source_connection_arn      = var.source_connection_arn
   s3codepipeline_bucket      = module.s3.codepipeline_bucket
