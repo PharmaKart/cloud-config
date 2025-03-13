@@ -1,5 +1,4 @@
 default_region = "ca-central-1"
-account_id     = "719150847619" // Change this to your ID
 
 vpc_cidr = "10.0.0.0/16"
 vpc_name = "pharmakart-vpc"
@@ -30,6 +29,7 @@ allowed_ssh_cidr      = ["0.0.0.0/0"] // Your IP address
 bastion_instance_type = "t3.micro"
 bastion_name          = "pharmakart-bastion"
 
+// Replace these secrets
 stripe_webhook_secret = "your-stripe-webhook-secret"
 stripe_secret_key     = "your-stripe-secret-key"
 jwt_secret            = "your-jwt-secret"
@@ -88,6 +88,6 @@ build_projects = {
 }
 
 // Replace this with your connection
-source_connection_arn = "arn:aws:codeconnections:ca-central-1:719150847619:connection/d9e8bed7-55ec-491e-af1e-c1e3a93eac94"
+source_connection_arn = ""
 
 bastion_private_key_path = ""
