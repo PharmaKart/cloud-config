@@ -48,6 +48,8 @@ CREATE TABLE orders (
     customer_id UUID REFERENCES users(id) ON DELETE CASCADE,
     status VARCHAR(50) CHECK (status IN ('payment_pending', 'payment_failed', 'approved', 'paid', 'shipped', 'completed', 'cancelled')) NOT NULL DEFAULT 'pending',
     prescription_url TEXT,  -- If required, stored in S3
+    shipping_cost DECIMAL(10,2) NOT NULL DEFAULT 0.00,
+    subtotal DECIMAL(10,2) NOT NULL,
     created_at TIMESTAMP DEFAULT NOW(),
     updated_at TIMESTAMP DEFAULT NOW()
 );
@@ -64,7 +66,7 @@ CREATE TABLE order_items (
 
 CREATE TABLE payments (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    order_id UUID UNIQUE REFERENCES orders(id) ON DELETE CASCADE,
+    order_id UUID REFERENCES orders(id) ON DELETE CASCADE,
     customer_id UUID REFERENCES users(id),
     transaction_id VARCHAR(255) UNIQUE NOT NULL, -- From Stripe
     amount DECIMAL(10,2) NOT NULL,
