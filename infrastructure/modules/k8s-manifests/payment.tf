@@ -8,11 +8,12 @@ resource "kubernetes_config_map" "payment_config" {
   }
 
   data = {
-    PORT         = "50054"
-    DB_HOST      = var.database_endpoint
-    DB_PORT      = var.db_port
-    DB_NAME      = var.db_name
-    FRONTEND_URL = var.frontend_endpoint
+    PORT              = "50054"
+    DB_HOST           = var.database_endpoint
+    DB_PORT           = var.db_port
+    DB_NAME           = var.db_name
+    FRONTEND_URL      = var.frontend_endpoint
+    ORDER_SERVICE_URL = "order-service:50053"
   }
 }
 
