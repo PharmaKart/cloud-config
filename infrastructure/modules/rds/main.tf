@@ -8,7 +8,7 @@ module "rds" {
   engine_version           = var.db_engine_version
   major_engine_version     = var.db_major_engine_version
   engine_lifecycle_support = "open-source-rds-extended-support-disabled"
-  family                   = "postgres16"
+  family                   = "postgres17"
 
   instance_class = var.rds_instance_class
 
