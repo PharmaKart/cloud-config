@@ -25,7 +25,7 @@ resource "aws_instance" "bastion" {
   sudo yum install -y aws-cli
 
   # Install PostgreSQL client
-  sudo yum install -y postgresql16
+  sudo yum install -y postgresql17
 
   # Install K9s
   sudo -u ec2-user bash << 'EOS'
